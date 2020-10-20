@@ -1,9 +1,8 @@
 {
-  "name": "screeps-typescript-starter",
+  "name": "screeps",
   "version": "3.0.0",
   "description": "",
   "main": "index.js",
-  "//": "If you add or change the names of destinations in screeps.json, make sure you update these scripts to reflect the changes",
   "scripts": {
     "lint": "eslint \"src/**/*.ts\"",
     "build": "rollup -c",
@@ -19,14 +18,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/screepers/screeps-typescript-starter.git"
+    "url": "git+https://github.com/webbertakken/screeps.git"
   },
-  "author": "",
-  "license": "Unlicense",
+  "author": "Webber",
+  "license": "MIT",
   "bugs": {
-    "url": "https://github.com/screepers/screeps-typescript-starter/issues"
+    "url": "https://github.com/webbertakken/screeps/issues"
   },
-  "homepage": "https://github.com/screepers/screeps-typescript-starter#readme",
+  "homepage": "https://github.com/webbertakken/screeps#readme",
   "engines": {
     "node": "10.x || 12.x"
   },

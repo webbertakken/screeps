@@ -13,6 +13,7 @@
     "allowSyntheticDefaultImports": true,
     "allowUnreachableCode": false
   },
+  "compileOnSave": true,
   "exclude": [
     "node_modules"
   ]
