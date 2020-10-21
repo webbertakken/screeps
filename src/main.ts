@@ -1,14 +1,17 @@
 import { ErrorMapper } from 'utils/ErrorMapper';
+import { initialise } from 'colony/initialise';
+import { cleanup } from './colony/cleanup';
+import { progress } from './colony/progress';
 
-// When compiling TS to JS and bundling with rollup, the line numbers and file names in error messages change
-// This utility uses source maps to get the line numbers and file names of the original, TS source code
 export const loop = ErrorMapper.wrapLoop(() => {
-  console.log(`Current game tick is ${Game.time}`);
+  initialise();
+  cleanup();
 
-  // Automatically delete memory of missing creeps
-  for (const name in Memory.creeps) {
-    if (!(name in Game.creeps)) {
-      delete Memory.creeps[name];
-    }
+  // Log the tick number every 20 ticks
+  const tick = Game.time;
+  if (tick % 20 === 0) {
+    console.log(tick);
   }
+
+  progress();
 });
