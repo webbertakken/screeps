@@ -16,11 +16,9 @@ export const initialise = (): void => {
     Memory.colony = {
       name: 'Webber',
       home: spawns[0].name,
-    };
-
-    Memory.creeps.creep = {
-      name: 'someName',
-      role: 'harvester',
+      meta: {
+        startTick: Game.time,
+      },
     };
 
     console.log(`Detected first spawn ${Memory.colony.home}.`);

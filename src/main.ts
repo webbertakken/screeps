@@ -1,17 +1,12 @@
 import { ErrorMapper } from 'utils/ErrorMapper';
 import { initialise } from 'colony/initialise';
 import { cleanup } from './colony/cleanup';
-import { progress } from './colony/progress';
+import { operations } from './colony/operations';
+import { showStats } from './colony/showStats';
 
 export const loop = ErrorMapper.wrapLoop(() => {
   initialise();
   cleanup();
-
-  // Log the tick number every 20 ticks
-  const tick = Game.time;
-  if (tick % 20 === 0) {
-    console.log(tick);
-  }
-
-  progress();
+  operations();
+  showStats();
 });
