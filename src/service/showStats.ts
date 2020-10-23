@@ -1,6 +1,6 @@
 import { Creeps } from '../creep/model/Creeps';
-import { StatsBuilder } from '../service/StatsBuilder';
-import { ColonyMemory } from './model/ColonyMemory';
+import { StatsBuilder } from './StatsBuilder';
+import { ColonyMemory } from '../colony/model/ColonyMemory';
 
 export const showStats = () => {
   const tick = Game.time;

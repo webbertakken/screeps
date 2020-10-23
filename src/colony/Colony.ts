@@ -1,6 +1,5 @@
 import { hasRespawned } from '../service/hasRespawned';
 import { ColonyMemory } from './model/ColonyMemory';
-import { cleanup } from './cleanup';
 import { CreepMemory } from '../creep/model/CreepMemory';
 
 export class Colony {

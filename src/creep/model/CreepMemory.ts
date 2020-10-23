@@ -1,6 +1,5 @@
 import { CreepRole } from './CreepRole';
 
-// Global because it's declared in @types/screeps
 declare global {
   interface CreepMemory {
     name: string;

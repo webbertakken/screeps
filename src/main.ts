@@ -1,7 +1,7 @@
 import { ErrorMapper } from 'utils/ErrorMapper';
 import { Strategy } from './strategy';
 import { init, updateGlobals } from './globals';
-import { showStats } from './colony/showStats';
+import { showStats } from './service/showStats';
 
 init();
 
