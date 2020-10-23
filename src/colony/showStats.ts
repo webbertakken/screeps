@@ -1,5 +1,5 @@
 import { Creeps } from '../creep/model/Creeps';
-import { StatsBuilder } from './service/StatsBuilder';
+import { StatsBuilder } from '../service/StatsBuilder';
 import { ColonyMemory } from './model/ColonyMemory';
 
 export const showStats = () => {

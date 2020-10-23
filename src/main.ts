@@ -1,12 +1,19 @@
 import { ErrorMapper } from 'utils/ErrorMapper';
-import { initialise } from 'colony/initialise';
-import { cleanup } from './colony/cleanup';
-import { operations } from './colony/operations';
+import { Strategy } from './strategy';
+import { init, updateGlobals } from './globals';
 import { showStats } from './colony/showStats';
 
+init();
+
 export const loop = ErrorMapper.wrapLoop(() => {
-  initialise();
-  cleanup();
-  operations();
+  updateGlobals();
+
+  if (Colony.hasRespawned()) {
+    Colony.reset();
+    return;
+  }
+
+  Strategy.execute();
+
   showStats();
 });
