@@ -7,6 +7,10 @@ declare global {
   }
 }
 
-export interface RoomsMemory {
-  [name: string]: RoomMemory;
+class RoomMemory {
+  public static delete(name: string): void {
+    delete Memory.rooms[name];
+  }
 }
+
+export { RoomMemory };

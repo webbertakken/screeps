@@ -18,6 +18,10 @@ class CreepMemory {
   public static delete(name: string): void {
     delete Memory.creeps[name];
   }
+
+  static getRole(id: Id<Creep>) {
+    return Memory.creeps[id]?.role;
+  }
 }
 
 export { CreepMemory };

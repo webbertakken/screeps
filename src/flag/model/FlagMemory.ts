@@ -4,6 +4,10 @@ declare global {
   }
 }
 
-export interface FlagsMemory {
-  [name: string]: FlagMemory;
+class FlagMemory {
+  public static delete(name: string) {
+    delete Memory.flags[name];
+  }
 }
+
+export { FlagMemory };

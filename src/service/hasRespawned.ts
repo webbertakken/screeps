@@ -12,20 +12,20 @@ export const hasRespawned = () => {
     return true;
   }
 
-  if (Creeps.length >= 1) {
+  if (Colony.creeps.length >= 1) {
     return false;
   }
 
-  if (Rooms.length >= 2) {
+  if (Colony.rooms.length >= 2) {
     return false;
   }
 
-  if (Spawns.length >= 2) {
+  if (Colony.spawns.length >= 2) {
     return false;
   }
 
   // check for controller, progress and safe mode
-  const room = Rooms[0];
+  const room = Colony.rooms[0].room;
   return !(
     !room.controller ||
     !room.controller.my ||

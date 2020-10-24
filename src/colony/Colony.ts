@@ -1,31 +1,45 @@
-import { hasRespawned } from '../service/hasRespawned';
 import { ColonyMemory } from './model/ColonyMemory';
-import { CreepMemory } from '../creep/model/CreepMemory';
+import { RoomManager } from '../room/RoomManager';
+import { CreepManager } from '../creep/CreepManager';
+import { GlobalsInjector } from './component/GlobalsInjector';
+import { BindingRehydrator } from './component/BindingRehydrator';
+import { FlagManager } from '../flag/FlagManager';
+import { SpawnManager } from '../spawn/SpawnManager';
+import { StructureManager } from '../structure/StructureManager';
 
 export class Colony {
-  public hasRespawned(): boolean {
-    return hasRespawned();
+  public rooms: RoomManager[];
+  public creeps: CreepManager[];
+  public flags: FlagManager[];
+  public spawns: SpawnManager[];
+  public structures: StructureManager[];
+
+  private globalsInjector: GlobalsInjector;
+  private bindings: BindingRehydrator;
+
+  public constructor() {
+    this.rooms = [];
+    this.creeps = [];
+    this.flags = [];
+    this.spawns = [];
+    this.structures = [];
+    this.globalsInjector = new GlobalsInjector(this);
+    this.bindings = new BindingRehydrator();
   }
 
-  public reset(): this {
+  public update() {
+    this.globalsInjector
+      .injectRooms(Game.rooms)
+      .injectCreeps(Game.creeps)
+      .injectFlags(Game.flags)
+      .injectSpawns(Game.spawns)
+      .injectStructures(Game.structures);
+
+    this.bindings.update([this.rooms, this.creeps, this.flags, this.spawns, this.structures]);
+  }
+
+  public reset() {
     ColonyMemory.reset(Game.time);
-
-    this.reIndexExisting();
     console.log(`You're witnessing the beginnings of a new colony. May it flourish!`);
-
-    return this;
-  }
-
-  private reIndexExisting(): void {
-    // Todo - index all creeps, structures and rooms
-  }
-
-  public cleanup() {
-    // Delete memory of missing creeps
-    for (const name in Memory.creeps) {
-      if (Game.creeps[name] === undefined) {
-        CreepMemory.delete(name);
-      }
-    }
   }
 }
