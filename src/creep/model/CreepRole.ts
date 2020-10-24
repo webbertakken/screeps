@@ -1,1 +1,7 @@
-export type CreepRole = 'harvester' | 'truck' | 'builder' | 'tank';
+export type CreepRole =
+  | 'hybridHarvester'
+  | 'dedicatedHarvester'
+  | 'universalBringer'
+  | 'dedicatedTruck'
+  | 'dedicatedBuilder'
+  | 'tank';
