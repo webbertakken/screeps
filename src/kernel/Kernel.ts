@@ -1,4 +1,4 @@
-import { Strategy } from '../strategy';
+import { Strategy } from '../colony/strategy';
 import { showStats } from '../service/showStats';
 
 export class Kernel {

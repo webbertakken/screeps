@@ -7,6 +7,10 @@ interface BuildQueueItem {
 // Todo - add to some room manager, static for now
 
 class BuildQueue {
+  public static size(room: Room) {
+    return room.memory.queue.length;
+  }
+
   public static ensure(room: Room) {
     room.memory.queue = [];
   }
