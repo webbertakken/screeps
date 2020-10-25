@@ -30,12 +30,23 @@ export class Colony {
 
   public update() {
     this.globalsInjector
-      .injectRooms(Game.rooms)
-      .injectCreeps(Game.creeps)
       .injectFlags(Game.flags)
       .injectSpawns(Game.spawns)
-      .injectStructures(Game.structures);
+      .injectStructures(Game.structures)
+      .injectRooms(Game.rooms)
+      .injectCreeps(Game.creeps);
 
     this.bindings.update([this.rooms, this.creeps, this.flags, this.spawns, this.structures]);
+  }
+
+  public venture() {
+    // Initial quick setup
+    for (const room of this.rooms) {
+      room.run();
+    }
+
+    for (const creep of this.creeps) {
+      creep.performRole();
+    }
   }
 }

@@ -3,12 +3,14 @@ import { SpawnMemory } from './model/SpawnMemory';
 
 export class SpawnManager implements IBinding {
   id: Id<StructureSpawn>;
+  roomName: string;
   spawn: StructureSpawn;
   isDead: boolean;
 
   public constructor(id: Id<StructureSpawn>, spawn: StructureSpawn) {
     this.id = id;
     this.spawn = spawn;
+    this.roomName = spawn.room.name;
     this.isDead = false;
     SpawnMemory.init(id);
   }

@@ -4,40 +4,22 @@ import { RoomManager } from '../../room/RoomManager';
 import { FlagManager } from '../../flag/FlagManager';
 import { SpawnManager } from '../../spawn/SpawnManager';
 import { StructureManager } from '../../structure/StructureManager';
+import { DependencyNotLoadedException } from '../../kernel/exceptions/DependencyNotLoadedException';
+
+enum Dependency {
+  Flags,
+  Structures,
+  Spawns,
+  Rooms,
+  Creeps,
+}
 
 export class GlobalsInjector {
   colony: Colony;
+  loaded: Dependency[] = [];
 
   constructor(Colony: Colony) {
     this.colony = Colony;
-
-    return this;
-  }
-
-  public injectRooms(rooms: { [name: string]: Room }) {
-    const existingRoomNames = this.colony.rooms.map((room) => room.name);
-    for (const key in rooms) {
-      const room = rooms[key];
-      const { name } = room;
-      if (!existingRoomNames.includes(name)) {
-        this.colony.rooms.push(new RoomManager(name, room));
-        console.log(`Added room: ${name}`);
-      }
-    }
-
-    return this;
-  }
-
-  public injectCreeps(creeps: { [name: string]: Creep }) {
-    const existingCreepIds = this.colony.creeps.map((creep) => creep.id);
-    for (const key in creeps) {
-      const creep = creeps[key];
-      const { id } = creep;
-      if (!existingCreepIds.includes(id)) {
-        this.colony.creeps.push(new CreepManager(id, creep));
-        console.log(`Added creep: ${creep.name}`);
-      }
-    }
 
     return this;
   }
@@ -53,6 +35,7 @@ export class GlobalsInjector {
       }
     }
 
+    this.loaded.push(Dependency.Flags);
     return this;
   }
 
@@ -67,6 +50,7 @@ export class GlobalsInjector {
       }
     }
 
+    this.loaded.push(Dependency.Spawns);
     return this;
   }
 
@@ -81,6 +65,51 @@ export class GlobalsInjector {
       }
     }
 
+    this.loaded.push(Dependency.Structures);
     return this;
+  }
+
+  public injectRooms(rooms: { [name: string]: Room }) {
+    this.checkPrerequisites([Dependency.Spawns]);
+
+    const existingRoomNames = this.colony.rooms.map((room) => room.name);
+    for (const key in rooms) {
+      const room = rooms[key];
+      const { name } = room;
+      if (!existingRoomNames.includes(name)) {
+        const spawns = this.colony.spawns.filter((spawn) => spawn.roomName === room.name);
+        this.colony.rooms.push(new RoomManager(name, room, spawns));
+      }
+    }
+
+    this.loaded.push(Dependency.Rooms);
+    return this;
+  }
+
+  public injectCreeps(creeps: { [name: string]: Creep }) {
+    this.checkPrerequisites([Dependency.Rooms]);
+
+    const existingCreepIds = this.colony.creeps.map((creep) => creep.id);
+    for (const key in creeps) {
+      const creep = creeps[key];
+      const { id } = creep;
+      if (!existingCreepIds.includes(id)) {
+        this.colony.creeps.push(new CreepManager(id, creep));
+        console.log(`Added creep: ${creep.name}`);
+      }
+    }
+
+    this.loaded.push(Dependency.Creeps);
+    return this;
+  }
+
+  private checkPrerequisites(dependencies: Dependency[]): void {
+    for (const dependency of dependencies) {
+      if (!this.loaded.includes(dependency)) {
+        throw new DependencyNotLoadedException(
+          `Missing ${Object.values(Dependency)[dependency]}-dependency. Inject them first`,
+        );
+      }
+    }
   }
 }

@@ -7,11 +7,13 @@ import { SpawnManager } from '../spawn/SpawnManager';
 export class RoomManager implements IBinding {
   name: string;
   room: Room;
+  spawns: SpawnManager[];
   isDefeated?: boolean;
 
-  public constructor(name: string, room: Room) {
+  public constructor(name: string, room: Room, spawns: SpawnManager[]) {
     this.name = name;
     this.room = room;
+    this.spawns = spawns;
     RoomMemory.init(name);
   }
 
@@ -65,6 +67,7 @@ export class RoomManager implements IBinding {
       return;
     }
 
+    this.spawns = Colony.spawns.filter((spawn) => spawn.roomName === this.name);
     this.room = room;
   }
 }

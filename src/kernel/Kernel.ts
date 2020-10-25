@@ -13,7 +13,8 @@ export class Kernel {
   }
 
   private logic() {
-    Strategy.execute();
+    Strategy.update();
+    Colony.venture();
   }
 
   private after() {

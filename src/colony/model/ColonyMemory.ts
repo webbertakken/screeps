@@ -1,9 +1,14 @@
+export enum Stage {
+  TheBeginning,
+}
+
 export interface ColonyMemoryMeta {
   startTick: number;
 }
 
 export interface ColonyMemory {
   meta: ColonyMemoryMeta;
+  stage: Stage;
 }
 
 export class ColonyMemory {
@@ -26,10 +31,16 @@ export class ColonyMemory {
       meta: {
         startTick: Game.time,
       },
+      stage: Stage.TheBeginning,
     };
   }
 
   public static get startTick(): number | undefined {
     return Memory?.colony?.meta?.startTick;
+  }
+
+  public static setStage(stage: Stage) {
+    Memory.colony.stage = stage;
+    console.log(`The colony has reached ${Object.values(Stage)[stage]}`);
   }
 }
