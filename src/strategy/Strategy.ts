@@ -3,7 +3,7 @@ import { ColonyMemory } from '../colony/model/ColonyMemory';
 
 export class Strategy {
   static execute() {
-    console.log('tick', Game.time);
+    console.log('tick');
 
     if (hasRespawned()) {
       ColonyMemory.delete();
