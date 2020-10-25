@@ -94,7 +94,8 @@ export class GlobalsInjector {
       const creep = creeps[key];
       const { id } = creep;
       if (!existingCreepIds.includes(id)) {
-        this.colony.creeps.push(new CreepManager(id, creep));
+        const room = this.colony.rooms.find((room) => room.name === creep.room.name) as RoomManager;
+        this.colony.creeps.push(new CreepManager(id, creep, room));
         console.log(`Added creep: ${creep.name}`);
       }
     }

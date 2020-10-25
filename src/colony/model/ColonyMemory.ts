@@ -19,14 +19,9 @@ export class ColonyMemory {
     return Memory.colony;
   }
 
-  public static delete(): void {
-    delete Memory.colony;
-  }
-
-  public static init() {
-    if (!this.get()) {
-      _.set(Memory, 'colony', this.create());
-    }
+  public static reset() {
+    console.log('Colony memory has been reset!');
+    Memory.colony = this.create();
   }
 
   public static create(): ColonyMemory {

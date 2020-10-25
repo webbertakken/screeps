@@ -4,10 +4,10 @@ import { Strategies as StrategyOption, StrategyMemory } from './model/StrategyMe
 
 export class Strategy {
   public static update() {
-    console.log('tick');
+    console.log('tick', Game.time);
 
     if (hasRespawned()) {
-      ColonyMemory.delete();
+      ColonyMemory.reset();
       console.log(`You're witnessing the beginnings of a new colony. May it flourish!`);
     }
   }

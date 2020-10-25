@@ -1,4 +1,6 @@
-interface IRole {
+import { CreepManager } from '../CreepManager';
+
+export interface IRole {
   new (): any;
-  perform: ((creep: Creep) => void) | (() => void);
+  perform: ((manager: CreepManager, creep: Creep) => void) | (() => void);
 }

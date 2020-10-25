@@ -9,6 +9,8 @@ export class RoomManager implements IBinding {
   spawns: SpawnManager[];
   isDefeated?: boolean;
 
+  private _myStructures: Structure[] = [];
+
   public constructor(name: string, room: Room, spawns: SpawnManager[]) {
     this.name = name;
     this.room = room;
@@ -39,5 +41,19 @@ export class RoomManager implements IBinding {
 
     this.spawns = Colony.spawns.filter((spawn) => spawn.roomName === this.name);
     this.room = room;
+  }
+
+  public getMyStructures() {
+    if (this._myStructures === undefined) {
+      this._myStructures = this.room.find(FIND_MY_STRUCTURES);
+    }
+
+    return this._myStructures;
+  }
+
+  getEnergyTakers(): (Creep | PowerCreep | Structure<StructureConstant>[])[] {
+    const inNeed = [];
+    inNeed.push(this.getMyStructures().filter((structure) => structure.structureType === STRUCTURE_SPAWN));
+    return inNeed;
   }
 }

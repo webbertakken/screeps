@@ -19,7 +19,7 @@ export class RoomMemory {
 
   public static init(name: string) {
     if (!this.get(name)) {
-      _.set(Memory, `rooms.${name}`, this.create(name));
+      Memory.rooms[name] = this.create(name);
     }
   }
 

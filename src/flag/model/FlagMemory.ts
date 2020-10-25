@@ -16,7 +16,7 @@ export class FlagMemory {
 
   public static init(name: string) {
     if (!this.get(name)) {
-      _.set(Memory, `flags.${name}`, this.create(name));
+      Memory.flags[name] = this.create(name);
     }
   }
 

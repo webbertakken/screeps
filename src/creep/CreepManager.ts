@@ -2,21 +2,24 @@ import { IBinding } from '../colony/interface/IBinding';
 import { CreepMemory } from './model/CreepMemory';
 import { CreepRole } from './model/CreepRole';
 import { Roles } from './Roles';
+import { RoomManager } from '../room/RoomManager';
 
 export class CreepManager implements IBinding {
   id: Id<Creep>;
   name: string;
   role: CreepRole;
+  room: RoomManager;
   creep: Creep;
   isDead: boolean;
 
-  public constructor(id: Id<Creep>, creep: Creep) {
+  public constructor(id: Id<Creep>, creep: Creep, room: RoomManager) {
     const { name, memory } = creep;
 
     this.id = id;
     this.name = name;
     this.role = memory.role;
     this.creep = creep;
+    this.room = room;
     this.isDead = false;
 
     // Only as backup for self-init
@@ -28,7 +31,10 @@ export class CreepManager implements IBinding {
 
     if (!creep) {
       // Remove from colony
-      const id = Colony.creeps.findIndex((manager) => manager.id === this.id);
+      const id = Colony.creeps.findIndex((manager) => {
+        console.log('find index:', manager.id, this.id);
+        return manager.id === this.id;
+      });
       delete Colony.creeps[id];
 
       // Remove its memory
@@ -51,6 +57,6 @@ export class CreepManager implements IBinding {
       return;
     }
 
-    role.perform(this.creep);
+    role.perform(this, this.creep);
   }
 }

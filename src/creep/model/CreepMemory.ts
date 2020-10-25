@@ -4,6 +4,7 @@ declare global {
   interface CreepMemory {
     name: string;
     role: CreepRole;
+    task?: string;
   }
   type CreepMemoryObject = CreepMemory;
 }
@@ -19,7 +20,7 @@ export class CreepMemory {
 
   public static init(name: string, memory: CreepMemoryObject) {
     if (!this.get(name)?.name) {
-      _.set(Memory, `creeps.${name}`, this.create(name, memory));
+      Memory.creeps[name] = this.create(name, memory);
     }
   }
 
@@ -27,7 +28,15 @@ export class CreepMemory {
     return { ...memory, name };
   }
 
-  static getRole(name: string) {
+  public static getRole(name: string) {
     return this.get(name)?.role;
+  }
+
+  public static getTask(creep: Creep): string | undefined {
+    return creep.memory.task || undefined;
+  }
+
+  public static setTask(creep: Creep, task: string | undefined) {
+    creep.memory.task = task;
   }
 }

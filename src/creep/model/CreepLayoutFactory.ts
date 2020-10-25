@@ -6,7 +6,7 @@ class CreepLayoutFactory {
   }
 
   public static createInitialDedicatedHarvesterLayout(): CreepLayout {
-    return [MOVE, CARRY, WORK];
+    return [MOVE, WORK];
   }
 
   public static createInitialUniversalBringerLayout(): CreepLayout {

@@ -17,7 +17,8 @@ export class StructureMemory {
 
   public static init(id: Id<Structure>, type: string) {
     if (!this.get(id)) {
-      _.set(Memory, `structures.${id}`, this.create(id, type));
+      if (!Memory.structures) Memory.structures = {};
+      Memory.structures[id] = this.create(id, type);
     }
   }
 
