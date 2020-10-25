@@ -2,7 +2,6 @@ import { CreepRole } from './CreepRole';
 
 declare global {
   interface CreepMemory {
-    id: Id<Creep>;
     name: string;
     role: CreepRole;
   }
@@ -18,14 +17,14 @@ export class CreepMemory {
     delete Memory.creeps[name];
   }
 
-  public static init(id: Id<Creep>, name: string, memory: CreepMemoryObject) {
-    if (!this.get(name)?.id) {
-      _.set(Memory, `creeps.${name}`, this.create(id, name, memory));
+  public static init(name: string, memory: CreepMemoryObject) {
+    if (!this.get(name)?.name) {
+      _.set(Memory, `creeps.${name}`, this.create(name, memory));
     }
   }
 
-  public static create(id: Id<Creep>, name: string, memory: CreepMemoryObject): CreepMemoryObject {
-    return { ...memory, id, name };
+  public static create(name: string, memory: CreepMemoryObject): CreepMemoryObject {
+    return { ...memory, name };
   }
 
   static getRole(name: string) {
