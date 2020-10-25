@@ -1,16 +1,23 @@
 import { IBinding } from '../colony/interface/IBinding';
 import { CreepMemory } from './model/CreepMemory';
+import { CreepRole } from './model/CreepRole';
+import { Roles } from './Roles';
 
 export class CreepManager implements IBinding {
   id: Id<Creep>;
+  name: string;
+  role: CreepRole;
   creep: Creep;
   isDead: boolean;
 
   public constructor(id: Id<Creep>, creep: Creep) {
     this.id = id;
+    this.name = creep.name;
+    this.role = creep.memory.role;
     this.creep = creep;
     this.isDead = false;
-    CreepMemory.init(id);
+    // Only as backup for self-init
+    CreepMemory.init(id, creep.name, creep.memory);
   }
 
   rehydrate(): void {
@@ -28,5 +35,16 @@ export class CreepManager implements IBinding {
     }
 
     this.creep = creep;
+  }
+
+  performRole() {
+    const role = Roles[this.role];
+
+    if (!role) {
+      this.creep.say(`No role 😢`);
+      return;
+    }
+
+    role.perform(this.creep);
   }
 }

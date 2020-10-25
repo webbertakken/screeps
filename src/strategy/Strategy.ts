@@ -14,5 +14,9 @@ export class Strategy {
     for (const room of Colony.rooms) {
       room.run();
     }
+
+    for (const creep of Colony.creeps) {
+      creep.performRole();
+    }
   }
 }
