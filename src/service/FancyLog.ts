@@ -1,6 +1,6 @@
 const minLineLength = 5;
 
-export class StatsBuilder {
+export class FancyLog {
   private readonly lines: string[];
   private longestLineLength: number;
 
@@ -23,7 +23,7 @@ export class StatsBuilder {
     return this;
   }
 
-  public build(): string {
+  public toString(): string {
     this.outputWidth = this.longestLineLength + 4;
     this.addBoxLine();
     for (const line of this.lines) {

@@ -1,11 +1,11 @@
 import { Creeps } from '../creep/model/Creeps';
-import { StatsBuilder } from './StatsBuilder';
+import { FancyLog } from './FancyLog';
 import { ColonyMemory } from '../colony/model/ColonyMemory';
 
 export const showStats = () => {
   const tick = Game.time;
   if (tick % 20 === 0) {
-    const stats = new StatsBuilder();
+    const stats = new FancyLog();
 
     // Ticks played
     const startTick = ColonyMemory.startTick;
@@ -15,6 +15,6 @@ export const showStats = () => {
     }
 
     stats.add(`Creeps: ${Creeps.count}`);
-    console.log(stats.build());
+    console.log(stats);
   }
 };
