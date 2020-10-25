@@ -1,10 +1,11 @@
 /**
  * Original: https://github.com/screepers/screeps-snippets/blob/79f67be88954639c9a6e7f6df85ba6683ffc06d6/src/globals/JavaScript/hasRespawned.js
  */
+import { ColonyMemory } from '../colony/model/ColonyMemory';
 
 export const hasRespawned = () => {
   // check for multiple calls on same tick
-  if (Memory?.colony?.meta?.startTick === Game.time) {
+  if (ColonyMemory.startTick === Game.time) {
     return true;
   }
 

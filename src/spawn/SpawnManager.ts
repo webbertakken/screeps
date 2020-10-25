@@ -10,6 +10,7 @@ export class SpawnManager implements IBinding {
     this.id = id;
     this.spawn = spawn;
     this.isDead = false;
+    SpawnMemory.init(id);
   }
 
   rehydrate(): void {

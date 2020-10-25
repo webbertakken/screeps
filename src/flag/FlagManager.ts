@@ -8,6 +8,7 @@ export class FlagManager implements IBinding {
   constructor(name: string, flag: Flag) {
     this.name = name;
     this.flag = flag;
+    FlagMemory.init(name);
   }
 
   rehydrate(): void {

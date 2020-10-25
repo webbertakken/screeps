@@ -2,12 +2,27 @@ declare global {
   interface FlagMemory {
     name: string;
   }
+  type FlagMemoryObject = FlagMemory;
 }
 
-class FlagMemory {
+export class FlagMemory {
+  public static get(name: string): FlagMemoryObject | undefined {
+    return Memory.flags?.[name];
+  }
+
   public static delete(name: string) {
     delete Memory.flags[name];
   }
-}
 
-export { FlagMemory };
+  public static init(name: string) {
+    if (!this.get(name)) {
+      _.set(Memory, `flags.${name}`, this.create(name));
+    }
+  }
+
+  public static create(name: string): FlagMemoryObject {
+    return {
+      name,
+    };
+  }
+}

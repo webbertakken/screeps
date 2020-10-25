@@ -1,13 +1,28 @@
 declare global {
   interface SpawnMemory {
-    name: string;
+    id: Id<StructureSpawn>;
   }
+  type SpawnMemoryObject = SpawnMemory;
 }
 
-class SpawnMemory {
-  public static delete(name: string) {
-    delete Memory.spawns[name];
+export class SpawnMemory {
+  public static get(id: Id<StructureSpawn>): SpawnMemoryObject | undefined {
+    return Memory.spawns?.[id];
+  }
+
+  public static delete(id: Id<StructureSpawn>) {
+    delete Memory.spawns[id];
+  }
+
+  public static init(id: Id<StructureSpawn>) {
+    if (!this.get(id)) {
+      _.set(Memory, `spawns.${id}`, this.create(id));
+    }
+  }
+
+  public static create(id: Id<StructureSpawn>): SpawnMemoryObject {
+    return {
+      id,
+    };
   }
 }
-
-export { SpawnMemory };

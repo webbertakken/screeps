@@ -10,6 +10,7 @@ export class CreepManager implements IBinding {
     this.id = id;
     this.creep = creep;
     this.isDead = false;
+    CreepMemory.init(id);
   }
 
   rehydrate(): void {

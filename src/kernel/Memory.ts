@@ -1,25 +1,20 @@
 import { Strategy } from '../strategy/model/StrategyMemory';
 import { ColonyMemory } from '../colony/model/ColonyMemory';
-import { RoomMemory } from '../room/model/RoomMemory';
-import { FlagMemory } from '../flag/model/FlagMemory';
-import { SpawnMemory } from '../spawn/model/SpawnMemory';
-import { CreepMemory } from '../creep/model/CreepMemory';
-import { StructureMemory } from '../structure/model/StructureMemory';
 
 declare global {
   interface Memory {
     strategy: Strategy;
     colony: ColonyMemory;
     // @ts-ignore
-    creeps: { [name: string]: CreepMemory };
+    rooms: { [name: string]: RoomMemoryObject };
     // @ts-ignore
-    flags: { [name: string]: FlagMemory };
+    creeps: { [name: string]: CreepMemoryObject };
     // @ts-ignore
-    rooms: { [name: string]: RoomMemory };
+    flags: { [name: string]: FlagMemoryObject };
     // @ts-ignore
-    spawns: { [name: string]: SpawnMemory };
+    spawns: { [name: string]: SpawnMemoryObject };
     // @ts-ignore
-    structures: { [name: string]: StructureMemory };
+    structures: { [name: string]: StructureMemoryObject };
   }
 }
 

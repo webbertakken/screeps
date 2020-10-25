@@ -12,9 +12,7 @@ export class RoomManager implements IBinding {
   public constructor(name: string, room: Room) {
     this.name = name;
     this.room = room;
-    console.log('Room instance created');
-
-    return this;
+    RoomMemory.init(name);
   }
 
   public run() {

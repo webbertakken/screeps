@@ -25,6 +25,7 @@ export class Colony {
     this.structures = [];
     this.globalsInjector = new GlobalsInjector(this);
     this.bindings = new BindingRehydrator();
+    ColonyMemory.init();
   }
 
   public update() {
@@ -36,10 +37,5 @@ export class Colony {
       .injectStructures(Game.structures);
 
     this.bindings.update([this.rooms, this.creeps, this.flags, this.spawns, this.structures]);
-  }
-
-  public reset() {
-    ColonyMemory.reset(Game.time);
-    console.log(`You're witnessing the beginnings of a new colony. May it flourish!`);
   }
 }

@@ -13,6 +13,7 @@ export class StructureManager implements IBinding {
     this.type = structure.structureType;
     this.structure = structure;
     this.isDead = false;
+    StructureMemory.init(id, this.type);
   }
 
   rehydrate(): void {
