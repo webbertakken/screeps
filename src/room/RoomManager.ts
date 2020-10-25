@@ -31,10 +31,11 @@ export class RoomManager implements IBinding {
         const firstQueueItem = BuildQueue.peek(this.room);
         console.log(firstQueueItem);
         if (firstQueueItem) {
-          const { layout, name } = firstQueueItem.blueprint;
-          if (OK === spawn.spawnCreep(layout, name, { dryRun: true })) {
-            const { layout, name } = BuildQueue.dequeue(this.room).blueprint;
-            spawn.spawnCreep(layout, name);
+          const { layout, name, role } = firstQueueItem.blueprint;
+          const memory = { role, name, id: name as Id<Creep> };
+          if (OK === spawn.spawnCreep(layout, name, { dryRun: true, memory })) {
+            BuildQueue.dequeue(this.room).blueprint;
+            spawn.spawnCreep(layout, name, { memory });
           }
 
           return;
