@@ -3,6 +3,7 @@ import { CreepMemory } from '../model/CreepMemory';
 import { ImplementationException } from '../../kernel/exceptions/ImplementationException';
 import { CreepManager } from '../CreepManager';
 import { IRole } from './IRole';
+import { Icon } from '../../service/Icon';
 
 type BringerTask = undefined | 'gathering' | 'bringing';
 
@@ -33,31 +34,68 @@ export class UniversalBringer {
       const result = creep.pickup(first);
       switch (result) {
         case ERR_NOT_IN_RANGE: {
+          creep.say(Icon.hauling, true);
           creep.moveTo(first);
-          break;
-        }
-        case OK: {
           if (creep.store.getFreeCapacity(RESOURCE_ENERGY) <= 0) {
             this.setTask(creep, 'bringing');
             this.perform(manager, creep);
           }
           break;
         }
+        case OK:
         case ERR_FULL: {
-          this.setTask(creep, 'bringing');
-          this.perform(manager, creep);
+          creep.say(Icon.check, true);
+          if (creep.store.getFreeCapacity(RESOURCE_ENERGY) <= 0) {
+            this.setTask(creep, 'bringing');
+            this.perform(manager, creep);
+          }
+          break;
         }
-        default:
+        case ERR_BUSY: {
+          creep.say(Icon.sprout, true);
+          break;
+        }
+        default: {
+          creep.say(Icon.error, true);
           console.log(`[UB][Gather] unhandled case ${result}`);
+        }
       }
     }
   }
 
   private static bring(creep: Creep, manager: CreepManager) {
-    const energyTakers = manager.room.getEnergyTakers();
-    // console.log(JSON.stringify(energyTakers, null, 2));
-    if (energyTakers.length >= 1) {
-      // const result = creep.transfer(energyTakers[0], 'energy')
+    const energyTakers = manager.room.getStructuresThatStoreEnergy();
+
+    if (energyTakers.length <= 0) {
+      creep.say(Icon.error, true);
+      console.log(`There are ${energyTakers.length} takers for energy.`);
+      return;
+    }
+
+    const target = energyTakers[0].structure;
+    const result = creep.transfer(target, 'energy');
+    switch (result) {
+      case OK:
+        if (creep.store.energy <= 3) {
+          creep.say(Icon.exclamation, true);
+        } else {
+          creep.say(Icon.transfer, true);
+        }
+        break;
+      case ERR_NOT_ENOUGH_ENERGY: {
+        this.setTask(creep, 'gathering');
+        this.perform(manager, creep);
+        break;
+      }
+      case ERR_NOT_IN_RANGE: {
+        creep.say(Icon.transfer, true);
+        creep.moveTo(target);
+        creep.transfer(target, 'energy');
+        break;
+      }
+      default:
+        creep.say(Icon.error, true);
+        console.log(`[UB][Bring] Unhandled result ${result}`);
     }
   }
 

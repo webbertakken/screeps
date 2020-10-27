@@ -2,17 +2,29 @@ import { IBinding } from '../colony/interface/IBinding';
 import { StructureMemory } from './model/StructureMemory';
 import { SpawnMemory } from '../spawn/model/SpawnMemory';
 
+export type StructureWithEnergyStore =
+  | StructureExtension
+  | StructurePowerSpawn
+  | StructureSpawn
+  | StructureTower
+  | StructureLab
+  | StructureNuker;
+
 export class StructureManager implements IBinding {
-  id: Id<Structure>;
-  type: string;
-  structure: Structure;
-  isDead: boolean;
+  public id: Id<Structure>;
+  public type: string;
+  public structure: Structure;
+  public roomName: string;
+  public owned: boolean;
+  public storesEnergy: boolean;
 
   public constructor(id: Id<Structure>, structure: Structure) {
     this.id = id;
     this.type = structure.structureType;
     this.structure = structure;
-    this.isDead = false;
+    this.roomName = structure.room.name;
+    this.owned = (structure as AnyOwnedStructure) !== null;
+    this.storesEnergy = (structure as StructureWithEnergyStore) !== null;
     StructureMemory.init(id, this.type);
   }
 

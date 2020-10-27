@@ -10,7 +10,6 @@ export class CreepManager implements IBinding {
   role: CreepRole;
   room: RoomManager;
   creep: Creep;
-  isDead: boolean;
 
   public constructor(id: Id<Creep>, creep: Creep, room: RoomManager) {
     const { name, memory } = creep;
@@ -20,7 +19,6 @@ export class CreepManager implements IBinding {
     this.role = memory.role;
     this.creep = creep;
     this.room = room;
-    this.isDead = false;
 
     // Only as backup for self-init
     CreepMemory.init(name, memory);
@@ -29,27 +27,12 @@ export class CreepManager implements IBinding {
   rehydrate(): void {
     const creep = Game.getObjectById<Creep>(this.id);
 
-    if (!creep) {
-      // Remove from colony
-      const id = Colony.creeps.findIndex((manager) => {
-        console.log('find index:', manager.id, this.id);
-        return manager.id === this.id;
-      });
-      delete Colony.creeps[id];
-
-      // Remove its memory
-      const role = CreepMemory.getRole(this.name);
-      if (role) {
-        CreepMemory.delete(this.name);
-        console.log(`Removed ${role} creep ${this.name}`);
-      }
-      return;
-    }
+    if (!creep) return this.remove();
 
     this.creep = creep;
   }
 
-  performRole() {
+  performRole(): void {
     const role = Roles[this.role];
 
     if (!role) {
@@ -58,5 +41,18 @@ export class CreepManager implements IBinding {
     }
 
     role.perform(this, this.creep);
+  }
+
+  remove(): void {
+    // Remove from colony
+    const index = Colony.creeps.findIndex((manager) => manager.id === this.id);
+    Colony.creeps.splice(index, 1);
+
+    // Remove its memory
+    const role = CreepMemory.getRole(this.name);
+    if (role) {
+      CreepMemory.delete(this.name);
+      console.log(`Removed ${role} creep ${this.name}`);
+    }
   }
 }

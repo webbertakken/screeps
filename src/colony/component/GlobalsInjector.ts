@@ -78,7 +78,8 @@ export class GlobalsInjector {
       const { name } = room;
       if (!existingRoomNames.includes(name)) {
         const spawns = this.colony.spawns.filter((spawn) => spawn.roomName === room.name);
-        this.colony.rooms.push(new RoomManager(name, room, spawns));
+        const structures = this.colony.structures.filter((structure) => structure.roomName == room.name);
+        this.colony.rooms.push(new RoomManager(name, room, spawns, structures));
       }
     }
 
