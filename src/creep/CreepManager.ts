@@ -3,6 +3,7 @@ import { CreepMemory } from './model/CreepMemory';
 import { CreepRole } from './model/CreepRole';
 import { Roles } from './Roles';
 import { RoomManager } from '../room/RoomManager';
+import { Icon } from '../service/Icon';
 
 export class CreepManager implements IBinding {
   id: Id<Creep>;
@@ -36,11 +37,16 @@ export class CreepManager implements IBinding {
     const role = Roles[this.role];
 
     if (!role) {
-      this.creep.say(`No role 😢`);
+      this.creep.say(`No role ${Icon.sad}`);
       return;
     }
 
     role.perform(this, this.creep);
+
+    const { ticksToLive } = this.creep;
+    if (ticksToLive && ticksToLive <= 45) {
+      this.creep.say(Icon.death);
+    }
   }
 
   remove(): void {
