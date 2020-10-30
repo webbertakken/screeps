@@ -34,6 +34,12 @@ export class ColonyMemory {
     };
   }
 
+  public static init(): void {
+    if (this.get() === undefined) {
+      this.reset();
+    }
+  }
+
   public static get startTick(): number | undefined {
     return Memory?.colony?.meta?.startTick;
   }

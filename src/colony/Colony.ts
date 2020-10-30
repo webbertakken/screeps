@@ -45,6 +45,7 @@ export class Colony {
     this.structures = [];
     this.globalsInjector = new GlobalsInjector(this);
     this.bindings = new BindingRehydrator();
+    ColonyMemory.init();
   }
 
   public update() {
