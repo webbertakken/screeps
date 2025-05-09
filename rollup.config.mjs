@@ -5,17 +5,13 @@ import commonjs from '@rollup/plugin-commonjs';
 import resolve from '@rollup/plugin-node-resolve';
 import screeps from 'rollup-plugin-screeps';
 import typescript from 'rollup-plugin-typescript2';
+import configFile from './screeps.js';
 
 const destination = process.env.DEST;
-if (!destination) {
-  console.log('No destination specified - code will be compiled but not uploaded');
-}
+if (!destination) console.log('No destination specified - code will be compiled but not uploaded');
 
-// eslint-disable-next-line
-const cfg = require('./screeps.json')[destination];
-if (cfg === null) {
-  throw new Error('Invalid upload destination');
-}
+const config = configFile[destination];
+if (config === null) throw new Error('Invalid upload destination');
 
 export default {
   input: 'src/main.ts',
@@ -30,6 +26,6 @@ export default {
     resolve(),
     commonjs(),
     typescript({ tsconfig: './tsconfig.json' }),
-    screeps({ config: cfg, dryRun: cfg == null }),
+    screeps({ config, dryRun: config == null }),
   ],
 };

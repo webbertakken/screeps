@@ -14,6 +14,8 @@ declare global {
 }
 
 export const init = () => {
+  // @ts-ignore
   global.Kernel = new Kernel();
+  // @ts-ignore
   global.Colony = ColonyFactory.create();
 };
