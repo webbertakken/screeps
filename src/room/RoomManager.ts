@@ -27,6 +27,8 @@ export class RoomManager implements IBinding {
       return;
     }
 
+    console.log(`Running instructions for room ${this.room.name}`);
+
     instructions.execute(this);
   }
 

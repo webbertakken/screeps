@@ -3,6 +3,7 @@ import { showStats } from '../service/showStats';
 
 export class Kernel {
   public runMainThread() {
+    console.log('Kernel is running');
     this.before();
     this.logic();
     this.after();

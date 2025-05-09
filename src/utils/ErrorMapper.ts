@@ -1,4 +1,3 @@
-/* eslint-disable no-underscore-dangle */
 import { SourceMapConsumer } from 'source-map';
 
 export class ErrorMapper {
@@ -75,13 +74,19 @@ export class ErrorMapper {
         loop();
       } catch (e) {
         if (e instanceof Error) {
-          if ('sim' in Game.rooms) {
-            console.log(`<span style='color:red'>${_.escape(e.stack)}</span>`);
-          } else {
-            console.log(`<span style='color:red'>${_.escape(this.sourceMappedStackTrace(e))}</span>`);
+          try {
+            if ('sim' in Game.rooms) {
+              const message = `Source maps don't work in the simulator - displaying original error`;
+              console.log(`<span style='color:red'>${message}<br>${e.stack}</span>`);
+            } else {
+              console.log(`<span style='color:red'>${this.sourceMappedStackTrace(e)}</span>`);
+            }
+          } catch (e) {
+            console.log(`<span style='color:red'>Sourcemap failed. Unable to parse error: ${e}}</span>`);
           }
         } else {
           // can't handle it
+          console.log('<span style="color:red">ErrorMapper caught an error that was not an Error object</span>');
           throw e;
         }
       }

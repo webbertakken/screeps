@@ -15,6 +15,9 @@ export class SpawnMemory {
   }
 
   public static init(id: Id<StructureSpawn>) {
+    if (!Memory.spawns) {
+      Memory.spawns = {};
+    }
     if (!this.get(id)) {
       Memory.spawns[id] = this.create(id);
     }

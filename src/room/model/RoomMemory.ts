@@ -18,6 +18,9 @@ export class RoomMemory {
   }
 
   public static init(name: string) {
+    if (!Memory.rooms) {
+      Memory.rooms = {};
+    }
     if (!this.get(name)) {
       Memory.rooms[name] = this.create(name);
     }
