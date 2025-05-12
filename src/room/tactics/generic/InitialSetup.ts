@@ -13,10 +13,29 @@ export class InitialSetup {
 
   private static ensureStarterCreeps(manager: RoomManager) {
     const { room } = manager;
-    if (Colony.creeps.length <= 0 && BuildQueue.size(room) <= 0) {
-      BuildQueue.enqueue(room, CreepBlueprintFactory.createInitialDedicatedHarvesterBlueprint());
-      BuildQueue.enqueue(room, CreepBlueprintFactory.createInitialUniversalBringerBlueprint());
-    }
+
+    // Every source should have a harvester and bringer, they should scale from 150 to 300 energy.
+    manager.getSources().forEach((source) => {
+      const harvesters = room.find(FIND_MY_CREEPS, {
+        filter: (creep) => creep.memory.role === 'dedicatedHarvester' && creep.memory.sourceId === source.id,
+      });
+
+      if (harvesters.length <= 0) {
+        BuildQueue.enqueue(room, CreepBlueprintFactory.createInitialDedicatedHarvesterBlueprint(), {
+          sourceId: source.id,
+        });
+      }
+
+      const bringers = room.find(FIND_MY_CREEPS, {
+        filter: (creep) => creep.memory.role === 'universalBringer' && creep.memory.sourceId === source.id,
+      });
+
+      if (bringers.length <= 0) {
+        BuildQueue.enqueue(room, CreepBlueprintFactory.createInitialUniversalBringerBlueprint(), {
+          sourceId: source.id,
+        });
+      }
+    });
   }
 
   private static buildFromQueue(manager: RoomManager): void {

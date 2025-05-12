@@ -5,6 +5,7 @@ declare global {
     name: string;
     role: CreepRole;
     task?: string;
+    sourceId?: Id<Source>;
   }
   type CreepMemoryObject = CreepMemory;
 }

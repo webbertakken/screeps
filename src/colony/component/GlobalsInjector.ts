@@ -5,6 +5,9 @@ import { FlagManager } from '../../flag/FlagManager';
 import { SpawnManager } from '../../spawn/SpawnManager';
 import { StructureManager } from '../../structure/StructureManager';
 import { DependencyNotLoadedException } from '../../kernel/exceptions/DependencyNotLoadedException';
+import { Units } from '../../creep/model/Units';
+import { Unit } from '../../creep/model/Unit';
+import { useMemory } from '../../utils/useMemory';
 
 enum Dependency {
   Flags,
@@ -65,6 +68,33 @@ export class GlobalsInjector {
       }
     }
 
+    const enemyStructures = this.colony.structures.filter((i) => i.isOwnable() && !i.isMine());
+    this.colony.enemyStructures = [
+      ...(enemyStructures
+        .filter((structure) => structure.type === STRUCTURE_TOWER)
+        .map((i) => i.structure) as StructureTower[]),
+      ...(enemyStructures
+        .filter((structure) => structure.type === STRUCTURE_EXTENSION)
+        .map((i) => i.structure) as StructureExtension[]),
+      ...(enemyStructures
+        .filter((structure) => structure.type === STRUCTURE_SPAWN)
+        .map((i) => i.structure) as StructureSpawn[]),
+      ...(enemyStructures
+        .filter((structure) => structure.type === STRUCTURE_RAMPART)
+        .map((i) => i.structure) as StructureRampart[]),
+    ];
+
+    // Todo - make this multi-room
+    this.colony.mySpawn = this.colony.spawns.find((i) => i.spawn.my)?.spawn as StructureSpawn;
+    useMemory('isLeft', this.colony.mySpawn.pos.x <= 49);
+    this.colony.myConstructionSites = this.colony.mySpawn.room.find(FIND_MY_CONSTRUCTION_SITES);
+    this.colony.walls = this.colony.mySpawn.room.find(FIND_STRUCTURES, {
+      filter: (structure) => structure.structureType === STRUCTURE_WALL,
+    });
+    this.colony.myExtensions = this.colony.mySpawn.room.find(FIND_MY_STRUCTURES, {
+      filter: (structure) => structure.structureType === STRUCTURE_EXTENSION,
+    }) as StructureExtension[];
+
     this.loaded.push(Dependency.Structures);
     return this;
   }
@@ -82,6 +112,9 @@ export class GlobalsInjector {
         this.colony.rooms.push(new RoomManager(name, room, spawns, structures));
       }
     }
+
+    this.colony.sources = this.colony.rooms.map((room) => room.getSources()).flat();
+    this.colony.containers = this.colony.rooms.map((room) => room.getContainers()).flat();
 
     this.loaded.push(Dependency.Rooms);
     return this;
@@ -101,8 +134,30 @@ export class GlobalsInjector {
       }
     }
 
+    this.colony.myUnits = this.colony.creeps.filter((i) => i.creep.my).map((i) => i.creep) as Unit[];
+    this.colony.enemyCreeps = this.colony.creeps.filter((i) => !i.creep.my).map((i) => i.creep) as Creep[];
+
+    const { workers, soldiers } = Units.categorise(this.colony.myUnits);
+    this.colony.workers = workers;
+    this.colony.soldiers = soldiers;
+
+    const { enemies, enemyCount } = this.getEnemies(this.colony.enemyCreeps);
+    this.colony.enemies = enemies;
+    this.colony.enemyCount = enemyCount;
+
     this.loaded.push(Dependency.Creeps);
     return this;
+  }
+
+  private getEnemies(enemyCreeps: Creep[]) {
+    const enemies = {
+      rangers: [] as Creep[],
+      medics: [] as Creep[],
+      melees: [] as Creep[],
+      uncategorised: [...enemyCreeps] as Creep[],
+    };
+
+    return { enemies, enemyCount: enemyCreeps.length };
   }
 
   private checkPrerequisites(dependencies: Dependency[]): void {

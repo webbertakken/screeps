@@ -15,7 +15,6 @@ export class StructureManager implements IBinding {
   public type: string;
   public structure: Structure;
   public roomName: string;
-  public owned: boolean;
   public storesEnergy: boolean;
 
   public constructor(id: Id<Structure>, structure: Structure) {
@@ -23,9 +22,20 @@ export class StructureManager implements IBinding {
     this.type = structure.structureType;
     this.structure = structure;
     this.roomName = structure.room.name;
-    this.owned = (structure as AnyOwnedStructure) !== null;
     this.storesEnergy = (structure as StructureWithEnergyStore) !== null;
     StructureMemory.init(id, this.type);
+  }
+
+  public isMine(): boolean {
+    return StructureManager.isOwnable(this.structure) && this.structure.my;
+  }
+
+  public isOwnable(): boolean {
+    return StructureManager.isOwnable(this.structure);
+  }
+
+  private static isOwnable(structure: Structure): structure is AnyOwnedStructure {
+    return (structure as AnyOwnedStructure) !== null;
   }
 
   rehydrate(): void {

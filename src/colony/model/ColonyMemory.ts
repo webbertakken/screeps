@@ -1,4 +1,4 @@
-import { StrategyMemory, StrategyMemoryObject } from '../strategy';
+import { StrategyMemory, type StrategyMemoryObject } from '../strategy';
 
 export enum Stage {
   TheBeginning,
@@ -8,7 +8,7 @@ export interface ColonyMemoryMeta {
   startTick: number;
 }
 
-export interface ColonyMemory {
+export interface ColonyMemoryObject {
   meta: ColonyMemoryMeta;
   stage: Stage;
   strategy: StrategyMemoryObject;
@@ -24,7 +24,7 @@ export class ColonyMemory {
     Memory.colony = this.create();
   }
 
-  public static create(): ColonyMemory {
+  public static create(): ColonyMemoryObject {
     return {
       meta: {
         startTick: Game.time,

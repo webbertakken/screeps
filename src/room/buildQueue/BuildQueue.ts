@@ -2,6 +2,7 @@ import { CreepBlueprint } from '../../creep/model/CreepBlueprint';
 
 interface BuildQueueItem {
   blueprint: CreepBlueprint;
+  memory: CreepMemory;
 }
 
 // Todo - add to some room manager, static for now
@@ -15,9 +16,11 @@ class BuildQueue {
     room.memory.queue = [];
   }
 
-  public static enqueue(room: Room, blueprint: CreepBlueprint) {
+  public static enqueue(room: Room, blueprint: CreepBlueprint, memory: Omit<CreepMemory, 'name' | 'role'> = {}): void {
+    const { name, role } = blueprint;
     const queueItem: BuildQueueItem = {
       blueprint,
+      memory: { ...memory, name, role },
     };
 
     room.memory.queue.push(queueItem);
