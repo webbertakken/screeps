@@ -7,6 +7,9 @@ import { SpawnManager } from '../spawn/SpawnManager';
 import { StructureManager } from '../structure/StructureManager';
 import { Stage, ColonyMemory } from './model/ColonyMemory';
 import { Strategies, StrategyMemory } from './strategy';
+import { Unit } from '../creep/model/Unit';
+import { Worker } from '../creep/model/Worker';
+import { Soldier } from '../creep/model/Soldier';
 
 export class Colony {
   public rooms: RoomManager[];
@@ -14,6 +17,25 @@ export class Colony {
   public flags: FlagManager[];
   public spawns: SpawnManager[];
   public structures: StructureManager[];
+
+  public myUnits: Unit[] = [];
+  public enemyCreeps: Creep[] = [];
+  public workers: Worker[] = [];
+  public soldiers: Soldier[] = [];
+  public enemies: { medics: Creep[]; uncategorised: Creep[]; rangers: Creep[]; melees: Creep[] } = {
+    medics: [],
+    uncategorised: [],
+    rangers: [],
+    melees: [],
+  };
+  public enemyCount: number = 0;
+  public enemyStructures: (StructureTower | StructureExtension | StructureSpawn | StructureRampart)[] = [];
+  public sources: Source[] = [];
+  public myExtensions: StructureExtension[] = [];
+  public mySpawn: StructureSpawn = {} as StructureSpawn;
+  public myConstructionSites: ConstructionSite[] = [];
+  public walls: StructureWall[] = [];
+  public containers: StructureContainer[] = [];
 
   private globalsInjector: GlobalsInjector;
   private bindings: BindingRehydrator;
@@ -48,7 +70,7 @@ export class Colony {
     ColonyMemory.init();
   }
 
-  public update() {
+  public loadInformation() {
     this.globalsInjector
       .injectFlags(Game.flags)
       .injectSpawns(Game.spawns)
@@ -57,16 +79,5 @@ export class Colony {
       .injectCreeps(Game.creeps);
 
     this.bindings.update([this.rooms, this.creeps, this.flags, this.spawns, this.structures]);
-  }
-
-  public venture() {
-    // Initial quick setup
-    for (const room of this.rooms) {
-      room.run();
-    }
-
-    for (const creep of this.creeps) {
-      creep.performRole();
-    }
   }
 }

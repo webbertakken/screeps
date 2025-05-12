@@ -1,15 +1,8 @@
-import { hasRespawned } from '../../service/hasRespawned';
-import { ColonyMemory } from '../model/ColonyMemory';
 import { Strategies as StrategyOption, StrategyMemory } from './model/StrategyMemory';
 
 export class Strategy {
   public static update() {
     console.log('tick', Game.time);
-
-    if (hasRespawned()) {
-      ColonyMemory.reset();
-      console.log(`You're witnessing the beginnings of a new colony. May it flourish!`);
-    }
   }
 
   public static setTo(strategy: StrategyOption) {

@@ -49,10 +49,22 @@ export class RoomManager implements IBinding {
   }
 
   public getMyStructures() {
-    return this.structures.filter((s) => s.owned);
+    return this.structures.filter((s) => s.isMine());
   }
 
   public getStructuresThatStoreEnergy() {
     return this.structures.filter((s) => s.storesEnergy);
+  }
+
+  public getSources(): Source[] {
+    return this.room.find(FIND_SOURCES);
+  }
+
+  public getContainers() {
+    return this.room.find(FIND_STRUCTURES, {
+      filter: (structure) => {
+        return structure.structureType === STRUCTURE_CONTAINER;
+      },
+    });
   }
 }

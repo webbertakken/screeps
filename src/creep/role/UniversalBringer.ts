@@ -60,6 +60,9 @@ export class UniversalBringer {
           console.log(`[UB][Gather] unhandled case ${result}`);
         }
       }
+    } else {
+      creep.say(Icon.error, true);
+      console.log(`There are ${energySources.length} sources of energy.`);
     }
   }
 

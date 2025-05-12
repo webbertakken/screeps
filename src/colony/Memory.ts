@@ -1,19 +1,17 @@
-import { ColonyMemory } from './model/ColonyMemory';
+import { ColonyMemoryObject } from './model/ColonyMemory';
 
 declare global {
-  interface Memory {
-    colony: ColonyMemory;
-    // @ts-ignore
+  interface ExtendedMemory {
+    [key: string]: any;
+    colony: ColonyMemoryObject;
     rooms: { [name: string]: RoomMemoryObject };
-    // @ts-ignore
     creeps: { [name: string]: CreepMemoryObject };
-    // @ts-ignore
     flags: { [name: string]: FlagMemoryObject };
-    // @ts-ignore
     spawns: { [name: string]: SpawnMemoryObject };
-    // @ts-ignore
     structures: { [name: string]: StructureMemoryObject };
   }
+
+  interface Memory extends ExtendedMemory {}
 }
 
 export {};
