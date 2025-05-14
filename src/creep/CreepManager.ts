@@ -28,7 +28,10 @@ export class CreepManager implements IBinding {
   rehydrate(): void {
     const creep = Game.getObjectById<Creep>(this.id);
 
-    if (!creep) return this.remove();
+    if (!creep) {
+      console.log(`Creep ${this.name} not found, removing`);
+      return this.remove();
+    }
 
     this.creep = creep;
   }
