@@ -86,7 +86,7 @@ export class GlobalsInjector {
 
     // Todo - make this multi-room
     this.colony.mySpawn = this.colony.spawns.find((i) => i.spawn.my)?.spawn as StructureSpawn;
-    useMemory('isLeft', this.colony.mySpawn.pos.x <= 49);
+    useMemory('isLeft', this.colony.mySpawn.pos.x <= 24);
     this.colony.myConstructionSites = this.colony.mySpawn.room.find(FIND_MY_CONSTRUCTION_SITES);
     this.colony.walls = this.colony.mySpawn.room.find(FIND_STRUCTURES, {
       filter: (structure) => structure.structureType === STRUCTURE_WALL,

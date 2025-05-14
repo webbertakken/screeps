@@ -29,14 +29,13 @@ export class SpawnManager implements IBinding {
     this.spawn = spawn;
   }
 
-  public build(blueprint: CreepBlueprint): boolean {
+  public build(blueprint: CreepBlueprint, memory: CreepMemory): boolean {
     if (!this.canBuild(blueprint)) {
       return false;
     }
 
     const { layout, name, role } = blueprint;
-    const memory = { role, name };
-    if (OK === this.spawn.spawnCreep(layout, name, { memory })) {
+    if (OK === this.spawn.spawnCreep(layout, name, { memory: { ...memory, role, name } })) {
       return true;
     }
 

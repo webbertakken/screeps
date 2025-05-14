@@ -52,6 +52,6 @@ export class Icon {
   }
 
   static get transfer(): string {
-    return '👷‍♂️';
+    return '▶️';
   }
 }

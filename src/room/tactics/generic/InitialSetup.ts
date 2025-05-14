@@ -49,8 +49,8 @@ export class InitialSetup {
         return;
       }
 
-      const { blueprint } = firstQueueItem;
-      if (spawn.build(blueprint)) {
+      const { blueprint, memory } = firstQueueItem;
+      if (spawn.build(blueprint, memory)) {
         BuildQueue.dequeue(room);
       }
     }

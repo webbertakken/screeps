@@ -1,6 +1,5 @@
 import { IBinding } from '../colony/interface/IBinding';
 import { StructureMemory } from './model/StructureMemory';
-import { SpawnMemory } from '../spawn/model/SpawnMemory';
 
 export type StructureWithEnergyStore =
   | StructureExtension
@@ -10,19 +9,19 @@ export type StructureWithEnergyStore =
   | StructureLab
   | StructureNuker;
 
-export class StructureManager implements IBinding {
+export class StructureManager<T extends Structure | OwnedStructure = Structure> implements IBinding {
   public id: Id<Structure>;
   public type: string;
-  public structure: Structure;
+  public structure: T;
   public roomName: string;
   public storesEnergy: boolean;
 
-  public constructor(id: Id<Structure>, structure: Structure) {
+  public constructor(id: Id<T>, structure: T) {
     this.id = id;
     this.type = structure.structureType;
     this.structure = structure;
     this.roomName = structure.room.name;
-    this.storesEnergy = (structure as StructureWithEnergyStore) !== null;
+    this.storesEnergy = typeof (structure as StructureWithEnergyStore).store !== 'undefined';
     StructureMemory.init(id, this.type);
   }
 
@@ -39,7 +38,7 @@ export class StructureManager implements IBinding {
   }
 
   rehydrate(): void {
-    const structure = Game.getObjectById<Structure>(this.id);
+    const structure = Game.getObjectById<Structure>(this.id) as T;
 
     if (!structure) {
       const id = Colony.structures.findIndex((manager) => manager.id === this.id);

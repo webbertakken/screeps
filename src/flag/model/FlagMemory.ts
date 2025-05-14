@@ -15,6 +15,10 @@ export class FlagMemory {
   }
 
   public static init(name: string) {
+    if (!Memory.flags) {
+      Memory.flags = {};
+    }
+
     if (!this.get(name)) {
       Memory.flags[name] = this.create(name);
     }

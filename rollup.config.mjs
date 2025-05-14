@@ -14,14 +14,12 @@ if (!destination) console.log('No destination specified - code will be compiled 
 const config = configFile[destination];
 if (config === null) throw new Error('Invalid upload destination');
 
-/**@type {() => import("rollup").Plugin} */
+/** @type {() => import("rollup").Plugin} */
 function sourcemapToJs() {
   return {
     writeBundle(options) {
       if (options.sourcemap && options.file) {
-        const str = readFileSync(`${options.file}.map`, {
-          encoding: 'utf-8',
-        });
+        const str = readFileSync(`${options.file}.map`, { encoding: 'utf-8' });
         writeFileSync(`${options.file}.map`, `module.exports = ${str}`);
       }
     },
@@ -34,7 +32,6 @@ export default {
     file: 'dist/main.js',
     format: 'cjs',
     sourcemap: true,
-    validate: true,
   },
 
   plugins: [

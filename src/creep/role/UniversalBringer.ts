@@ -28,7 +28,7 @@ export class UniversalBringer {
   }
 
   private static gather(creep: Creep, manager: CreepManager) {
-    const energySources = this.findEnergy(creep);
+    const energySources = this.findDroppedEnergy(creep);
     if (energySources.length >= 1) {
       const [first] = energySources;
       const result = creep.pickup(first);
@@ -61,8 +61,8 @@ export class UniversalBringer {
         }
       }
     } else {
-      creep.say(Icon.error, true);
-      console.log(`There are ${energySources.length} sources of energy.`);
+      // creep.say(Icon.error, true);
+      // console.log(`There are ${energySources.length} sources of energy.`);
     }
   }
 
@@ -102,7 +102,7 @@ export class UniversalBringer {
     }
   }
 
-  private static findEnergy(creep: Creep) {
+  private static findDroppedEnergy(creep: Creep) {
     return creep.room.find(FIND_DROPPED_RESOURCES);
   }
 
