@@ -2,7 +2,7 @@
 # Manual changes might be lost - proceed with caution!
 
 __metadata:
-  version: 8
+  version: 9
   cacheKey: 10
 
 "@babel/code-frame@npm:7.12.11":
@@ -4637,6 +4637,13 @@ __metadata:
     ts-node: "npm:^10.9.2"
     tsconfig-paths: "npm:^4.2.0"
     typescript: "npm:^5.8.3"
+  dependenciesMeta:
+    bufferutil:
+      built: true
+    unrs-resolver:
+      built: true
+    utf-8-validate:
+      built: true
   languageName: unknown
   linkType: soft
 
