@@ -2,7 +2,7 @@ import { InitialSetup } from '../room/tactics/generic/InitialSetup';
 
 export class Spawner {
   static spawnWhatIsNeeded() {
-    const { mySpawn, workers, soldiers, spawns } = Colony;
+    const { mySpawn } = Colony;
 
     const firstRoom = Colony.rooms.find((room) => room.name == mySpawn.room.name)!;
 

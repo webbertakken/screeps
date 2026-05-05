@@ -1,6 +1,10 @@
-const { readFileSync } = require('fs');
-const _ = require('lodash');
+import { readFileSync } from 'node:fs';
+
+import { afterEach, beforeAll, beforeEach } from 'vitest';
+
+// Loaded via require because `screeps-server-mockup` is CJS and lacks types.
 const { ScreepsServer, stdHooks } = require('screeps-server-mockup');
+
 const DIST_MAIN_JS = 'dist/main.js';
 
 /*
@@ -12,15 +16,15 @@ class IntegrationTestHelper {
   private _server: any;
   private _player: any;
 
-  get server() {
+  public get server() {
     return this._server;
   }
 
-  get player() {
+  public get player() {
     return this._player;
   }
 
-  async beforeEach() {
+  public async beforeEach() {
     this._server = new ScreepsServer();
 
     // reset world but add invaders and source keepers bots
@@ -31,18 +35,25 @@ class IntegrationTestHelper {
 
     // add a player with the built dist/main.js file
     const modules = {
-        main: readFileSync(DIST_MAIN_JS).toString(),
+      main: readFileSync(DIST_MAIN_JS).toString(),
     };
-    this._player = await this._server.world.addBot({ username: 'player', room: 'W0N1', x: 15, y: 15, modules });
+    this._player = await this._server.world.addBot({
+      username: 'player',
+      room: 'W0N1',
+      x: 15,
+      y: 15,
+      modules,
+    });
 
-    // Start server
     await this._server.start();
   }
 
-  async afterEach() {
+  public async afterEach() {
     await this._server.stop();
   }
 }
+
+export const helper = new IntegrationTestHelper();
 
 beforeEach(async () => {
   await helper.beforeEach();
@@ -52,8 +63,6 @@ afterEach(async () => {
   await helper.afterEach();
 });
 
-before(() => {
+beforeAll(() => {
   stdHooks.hookWrite();
 });
-
-export const helper = new IntegrationTestHelper();

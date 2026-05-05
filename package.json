@@ -5,15 +5,30 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "lint": "eslint \"src/**/*.ts\"",
     "build": "rollup -c",
     "push-main": "rollup -c --environment DEST:main",
     "push-dev": "rollup -c --environment DEST:develop",
-    "test": "npm run test-unit",
-    "test-unit": "mocha test/unit/**/*.ts",
-    "test-integration": "echo 'See docs/in-depth/testing.md for instructions on enabling integration tests'",
     "watch-main": "rollup -cw --environment DEST:main",
-    "watch-dev": "rollup -cw --environment DEST:develop"
+    "watch-dev": "rollup -cw --environment DEST:develop",
+    "test": "node scripts/ensure-husky.mjs && vitest run",
+    "test:watch": "vitest",
+    "test:integration": "echo 'See docs/in-depth/testing.md for instructions on enabling integration tests'",
+    "coverage": "vitest run --coverage",
+    "lint": "yarn oxlint --report-unused-disable-directives",
+    "format": "oxfmt --write",
+    "format:check": "oxfmt --check",
+    "typecheck": "tsgo --noEmit",
+    "typecheck:tsc": "tsc --noEmit",
+    "setup:hooks": "node scripts/ensure-husky.mjs",
+    "prepare": "husky"
+  },
+  "lint-staged": {
+    "*.@(ts|tsx|mts|js|jsx|mjs|cjs)": [
+      "oxlint --fix --quiet",
+      "oxfmt --write"
+    ],
+    "*.@(json|jsonc|json5|md|mdx|yaml|yml|css|scss|sass|html|toml)": "oxfmt --write",
+    ".github/workflows/*.@(yml|yaml)": "actionlint"
   },
   "repository": {
     "type": "git",
@@ -31,47 +46,32 @@
   "devDependencies": {
     "@rollup/plugin-commonjs": "^28.0.3",
     "@rollup/plugin-node-resolve": "^16.0.1",
-    "@types/chai": "^5.2.2",
     "@types/lodash": "4.17.16",
-    "@types/mocha": "^10.0.10",
     "@types/node": "^22.15.17",
     "@types/screeps": "^3.3.8",
-    "@types/sinon": "^17.0.4",
-    "@types/sinon-chai": "^4.0.0",
-    "@typescript-eslint/eslint-plugin": "^7.18.0",
-    "@typescript-eslint/parser": "^7.18.0",
-    "@typescript-eslint/typescript-estree": "^7.18.0",
-    "chai": "^5.2.0",
-    "eslint": "^7.32.0",
-    "eslint-config-prettier": "^10.1.5",
-    "eslint-import-resolver-typescript": "^4.3.4",
-    "eslint-plugin-import": "^2.31.0",
-    "eslint-plugin-prettier": "^5.4.0",
+    "@typescript/native-preview": "^7.0.0-dev.20260505.1",
+    "@vitest/coverage-istanbul": "^4.1.5",
+    "eslint": "^10.3.0",
+    "eslint-plugin-unicorn": "^64.0.0",
+    "husky": "9",
+    "lint-staged": "^16.4.0",
     "lodash": "^4.17.21",
-    "mocha": "^11.2.2",
-    "prettier": "^3.5.3",
+    "oxfmt": "^0.48.0",
+    "oxlint": "^1.63.0",
     "rollup": "^4.40.2",
     "rollup-plugin-clear": "^2.0.7",
     "rollup-plugin-screeps": "^1.0.1",
     "rollup-plugin-typescript2": "^0.36.0",
-    "sinon": "^20.0.0",
-    "sinon-chai": "^4.0.0",
-    "ts-node": "^10.9.2",
-    "tsconfig-paths": "^4.2.0",
-    "typescript": "^5.8.3"
+    "typescript": "^5.8.3",
+    "vite": "^7",
+    "vitest": "^4"
   },
   "dependencies": {
     "source-map": "~0.6.1"
   },
   "packageManager": "yarn@4.14.1",
   "dependenciesMeta": {
-    "bufferutil": {
-      "built": true
-    },
     "unrs-resolver": {
-      "built": true
-    },
-    "utf-8-validate": {
       "built": true
     }
   }
