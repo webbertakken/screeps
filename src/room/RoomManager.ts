@@ -91,9 +91,12 @@ export class RoomManager implements IBinding {
       sortedStructuresThatNeedEnergy;
 
     // If controller is almost downgrading, put it at the front of the list, otherwise at the end
-    controller.isMine() && controller.structure.ticksToDowngrade < 3100 // 3100 = 100 ticks before the email
-      ? priorityStructures.unshift(controller)
-      : priorityStructures.push(controller);
+    // (3100 = 100 ticks before the email).
+    if (controller.isMine() && controller.structure.ticksToDowngrade < 3100) {
+      priorityStructures.unshift(controller);
+    } else {
+      priorityStructures.push(controller);
+    }
 
     // Bring order
     // console.log('bring order is now', priorityStructures.map((i) => i.structure.structureType));

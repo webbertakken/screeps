@@ -1,19 +1,23 @@
 {
   "compilerOptions": {
     "module": "esnext",
-    "lib": ["es2018"],
-    "target": "es2018",
-    "moduleResolution": "Node",
+    "lib": ["es2022"],
+    "target": "es2022",
+    "moduleResolution": "bundler",
     "outDir": "dist",
-    "baseUrl": "src/",
+    "paths": {
+      "*": ["./src/*"]
+    },
     "sourceMap": true,
     "strict": true,
     "experimentalDecorators": true,
     "noImplicitReturns": true,
     "allowSyntheticDefaultImports": true,
-    "allowUnreachableCode": false
+    "allowUnreachableCode": false,
+    "skipLibCheck": true,
+    "noEmit": true,
+    "types": ["@types/screeps", "@types/node", "@types/lodash"]
   },
-  "exclude": [
-    "node_modules"
-  ]
+  "include": ["src/**/*", "test/**/*"],
+  "exclude": ["node_modules", "dist", "coverage"]
 }

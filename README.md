@@ -1,6 +1,6 @@
 # Screeps
 
-AI for 
+AI for
 
 ## Usage
 
@@ -26,7 +26,7 @@ yarn push-main
 ```bash
 yarn watch-main
 ```
- 
+
 ## Contributing
 
 No contributions expected
